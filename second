@@ -1,0 +1,10 @@
+This ansible configuration 
+----
+Hosts : all 
+username : ansible
+become : yes
+connetion : ssh
+  tasks
+ - name : instaing git
+   action : name=yum state=prestent
+
