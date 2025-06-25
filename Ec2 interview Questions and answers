@@ -1,0 +1,211 @@
+# AWS EC2 Interview Questions and Answers (with Examples)
+
+## 1. **What is Amazon EC2, and what are its primary features?**
+
+**Answer:**
+Amazon EC2 (Elastic Compute Cloud) is a web service that allows you to run virtual servers in the cloud. Key features:
+
+* **Elasticity:** Add or remove servers based on your needs.
+* **Instance Types:** Choose the right server type for your work, e.g., high memory or fast processing.
+* **Storage:** Attach virtual hard drives (EBS) to store data.
+* **Integration:** Works with other AWS services like S3 (storage) and RDS (databases).
+* **Security:** Protect your servers with secure networking and user access rules.
+* **Auto Scaling and Load Balancing:** Automatically adjust the number of servers and share traffic.
+
+## 2. **Example:** Your website gets random spikes in traffic. How do you design it using EC2?
+
+**Solution:**
+
+1. Use **Auto Scaling Groups** to add or remove servers based on traffic.
+2. Add a **Load Balancer** to share traffic across servers.
+3. Use **Spot Instances** for lower costs and **On-Demand Instances** for consistent traffic.
+4. Store images or static files in **S3**, and use **CloudFront** for faster delivery.
+
+## 3. **How do you ensure your EC2-hosted application is always running?**
+
+**Answer:**
+
+* Distribute servers across different zones in the same region.
+* Use Auto Scaling Groups to replace failed servers automatically.
+* Add Load Balancers to share traffic and prevent overload.
+* Regularly back up your data and create a recovery plan.
+
+## 4. **Example:** You cannot connect to your EC2 instance using SSH. What do you do?
+
+**Solution:**
+
+1. Check if **Security Group** allows SSH (port 22).
+2. Verify that **Network ACL** in the VPC permits SSH traffic.
+3. Use the correct private key and username to log in.
+4. Check the instance system logs in AWS Console for errors.
+5. If needed, detach the storage, fix it on another instance, and reattach it.
+
+## 5. **What are the pricing models for EC2?**
+
+**Answer:**
+
+* **On-Demand:** Pay only for what you use, with no commitments.
+* **Reserved:** Commit for 1 or 3 years to get a discount.
+* **Spot:** Save costs by using unused servers but they may stop anytime.
+* **Savings Plans:** Discounted pricing for consistent usage.
+* **Dedicated Hosts:** Rent a full physical server for special needs.
+
+## 6. **Example:** Moving an application from office servers to AWS. How do you choose the right EC2 size?
+
+**Solution:**
+
+1. Use tools like **AWS Migration Hub** to measure your current server needs.
+2. Choose EC2 instances that match your CPU, memory, and storage requirements.
+3. Start small and scale up using Auto Scaling if needed.
+4. Monitor performance with **CloudWatch** and adjust as necessary.
+
+## 7. **How do you secure an EC2 instance?**
+
+**Answer:**
+
+* Use **IAM roles** to assign the correct permissions.
+* Restrict access using **Security Groups** and **Network ACLs**.
+* Encrypt data stored on the instance and transmitted over the network.
+* Regularly update the operating system and software.
+* Use key pairs for secure SSH access.
+* Enable AWS tools like **Inspector** and **GuardDuty** to identify security risks.
+
+## 8. **Example:** Your EC2 instance processes large files daily. How do you optimize performance and cost?
+
+**Solution:**
+
+1. Use **EBS-optimized** instances for better storage performance.
+2. Choose instance types suited for heavy tasks, like compute-optimized instances.
+3. Use **Spot Instances** for cost savings if tasks can restart.
+4. Store files in **S3** for cheaper and faster access with **Transfer Acceleration**.
+5. Use **AWS Lambda** to pre-process data and reduce EC2 usage.
+
+## 9. **What’s the difference between AMI and Snapshot?**
+
+**Answer:**
+
+* **AMI (Amazon Machine Image):** A template to launch new EC2 instances with pre-installed software.
+* **Snapshot:** A backup of your EBS volume that you can use to create a new AMI or restore data.
+
+## 10. **Example:** Your EC2 instance stops suddenly. How do you investigate?
+
+**Solution:**
+
+1. Check the **EC2 Event History** in the AWS Console.
+2. Verify if Auto Scaling terminated it due to scaling policies.
+3. Review **CloudWatch** metrics for unusual patterns before the shutdown.
+4. Ensure IAM rules were not misused.
+5. Use **AWS Trusted Advisor** to check for setup issues.
+
+## 11. **What is the difference between public and private IP addresses in EC2?**
+
+**Answer:**
+
+* **Public IP Address:**
+
+  * Assigned to an instance in a public subnet.
+  * Can be used to access the instance over the internet.
+  * Changes when the instance is stopped and restarted unless associated with an Elastic IP.
+
+* **Private IP Address:**
+
+  * Used for internal communication within the VPC.
+  * Remains fixed throughout the instance’s lifecycle.
+
+## 12. **Example:** How do you recover data from a terminated EC2 instance?
+
+**Solution:**
+
+1. Locate the EBS volume attached to the terminated instance in the AWS Console.
+2. Detach the volume and attach it to another instance as a secondary volume.
+3. Mount the volume on the new instance and access the data.
+4. Create a snapshot of the volume for future recovery.
+
+## 13. **What are placement groups in EC2?**
+
+**Answer:**
+
+Placement groups allow you to influence the placement of your instances to optimize performance or reduce latency.
+
+* **Cluster Placement Group:** Instances are placed close together for high performance and low latency.
+* **Spread Placement Group:** Instances are spread across hardware to reduce failure impact.
+* **Partition Placement Group:** Instances are divided into partitions to isolate groups from failures.
+
+## 14. **Example:** How do you ensure minimal downtime during EC2 instance updates?
+
+**Solution:**
+
+1. Use a Load Balancer to distribute traffic between multiple instances.
+2. Create a new instance with the updated configuration.
+3. Test the new instance thoroughly.
+4. Gradually shift traffic to the new instance using the Load Balancer.
+5. Terminate the old instance after ensuring stability.
+
+## 15. **What is the difference between EC2 termination and stopping an instance?**
+
+**Answer:**
+
+* **Stopping an Instance:**
+
+  * The instance is shut down, but the EBS volume remains attached.
+  * You can restart the instance later without data loss.
+
+* **Terminating an Instance:**
+
+  * The instance is permanently deleted, and attached volumes are also deleted unless configured otherwise.
+
+## 16. **Example:** How do you monitor EC2 instances effectively?
+
+**Solution:**
+
+1. Use **CloudWatch Metrics** to track performance metrics like CPU usage, memory, and disk activity.
+2. Set up **CloudWatch Alarms** for threshold breaches (e.g., high CPU usage).
+3. Enable detailed monitoring for additional insights.
+4. Use third-party monitoring tools like Datadog or Nagios for advanced features.
+
+## 17. **What are Elastic Network Interfaces (ENIs) in EC2?**
+
+**Answer:**
+
+ENIs are virtual network interfaces that can be attached to EC2 instances. They allow you to:
+
+* Assign multiple private IP addresses to an instance.
+* Attach or detach them from instances for flexibility.
+* Enable separate network interfaces for different applications on the same instance.
+
+## 18. **Example:** How do you handle EC2 instance failures automatically?
+
+**Solution:**
+
+1. Use **Auto Scaling** to detect instance health and replace failed instances.
+2. Configure a Load Balancer to remove unhealthy instances automatically.
+3. Use CloudWatch Alarms to trigger actions based on failure metrics.
+
+## 19. **What are security groups and how do they differ from Network ACLs?**
+
+**Answer:**
+
+* **Security Groups:**
+
+  * Act as a firewall for EC2 instances.
+  * Control inbound and outbound traffic at the instance level.
+  * State-based: Responses to allowed traffic are automatically permitted.
+
+* **Network ACLs:**
+
+  * Act as a firewall for subnets.
+  * Control inbound and outbound traffic at the subnet level.
+  * Stateless: Rules must be defined for both directions of traffic.
+
+## 20. **Example:** How do you configure high availability for a database on EC2?
+
+**Solution:**
+
+1. Deploy the database across multiple Availability Zones (AZs).
+2. Use a Load Balancer to distribute read requests to replicas.
+3. Configure automatic failover using tools like Amazon RDS Multi-AZ or a custom setup.
+4. Regularly back up the database using snapshots or backup tools.
+
+---
+
+This document simplifies AWS EC2 concepts and provides real-life examples to help you prepare for interviews.
