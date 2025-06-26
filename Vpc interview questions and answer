@@ -1,0 +1,91 @@
+To create a private subnet and attach an EC2 instance to it, follow the detailed step-by-step guide below:
+
+---
+
+### **Step 1: Create a VPC**
+
+1. Open the **VPC Dashboard** in the AWS Management Console.
+2. Click **Create VPC**.
+
+   * **Name tag:** Provide a name (e.g., `MyPrivateVPC`).
+   * **IPv4 CIDR block:** Specify the range (e.g., `10.0.0.0/16`).
+   * Choose other defaults and click **Create VPC**.
+
+---
+
+### **Step 2: Create a Private Subnet**
+
+1. Go to the **Subnets** section in the VPC dashboard.
+2. Click **Create subnet**.
+
+   * **Name tag:** Enter a name (e.g., `MyPrivateSubnet`).
+   * **VPC:** Select the VPC created earlier.
+   * **Availability Zone:** Choose an availability zone (e.g., `us-east-1a`).
+   * **IPv4 CIDR block:** Specify a range within the VPC CIDR (e.g., `10.0.1.0/24`).
+3. Click **Create subnet**.
+
+---
+
+### **Step 3: Disable Auto-Assign Public IP**
+
+1. In the Subnets section, select the **private subnet**.
+2. Click on **Actions → Modify auto-assign IP settings**.
+3. Uncheck **Auto-assign public IPv4 address** and click **Save**.
+
+---
+
+### **Step 4: Create a Route Table for the Private Subnet**
+
+1. Go to the **Route Tables** section in the VPC dashboard.
+2. Click **Create route table**.
+
+   * **Name tag:** Enter a name (e.g., `PrivateRouteTable`).
+   * **VPC:** Select your VPC.
+3. Click **Create route table**.
+4. Associate the private subnet with this route table:
+
+   * Select the route table → **Subnet associations → Edit subnet associations**.
+   * Check the **private subnet** and save.
+
+---
+
+### **Step 5: Launch an EC2 Instance in the Private Subnet**
+
+1. Open the **EC2 Dashboard** and click **Launch Instance**.
+2. Configure the following:
+
+   * **Name:** Enter a name for the instance (e.g., `PrivateInstance`).
+   * **AMI:** Choose an Amazon Machine Image (e.g., Amazon Linux 2).
+   * **Instance Type:** Choose the instance type (e.g., `t2.micro`).
+3. Under **Network Settings**:
+
+   * **VPC:** Select your custom VPC.
+   * **Subnet:** Select your private subnet.
+   * **Auto-assign Public IP:** Ensure this is set to **Disabled**.
+   * **Private IPv4 Address:** Optionally assign a specific private IP within the subnet's CIDR (e.g., `10.0.1.10`).
+4. **Security Group:**
+
+   * Create or select a security group that allows access from specific IPs or within the VPC.
+5. Complete the configuration and click **Launch Instance**.
+
+---
+
+### **Step 6: Connect to the Private EC2 Instance**
+
+Since this instance has no public IP, use one of the following methods:
+
+#### **1. Bastion Host (Jump Box)**:
+
+* Launch a public EC2 instance in the same VPC (public subnet).
+* SSH into the public instance and then SSH to the private instance using its private IP.
+
+#### **2. VPN Connection**:
+
+* Establish a VPN connection to your VPC and access the private instance directly using its private IP.
+
+#### **3. AWS Systems Manager (Session Manager)**:
+
+* Enable Systems Manager in the private instance and connect directly from the AWS Console without SSH.
+
+---
+
